@@ -1,0 +1,162 @@
+---
+import { site } from '../config/site';
+
+const businessTypes = [
+  { value: 'clinic', label: 'Clinic' },
+  { value: 'beauty_wellness', label: 'Beauty / wellness' },
+  { value: 'trades_home_services', label: 'Trades / home services' },
+  { value: 'professional_services', label: 'Professional services' },
+  { value: 'other', label: 'Other' },
+];
+---
+<div class="pf" data-project-form>
+  <p class="pf__dev" hidden data-dev-warning role="note">
+    <strong>Dev only:</strong> <code>PUBLIC_LEAD_ENDPOINT</code> is not set, so this form won’t send anything.
+    Set it in <code>.env</code> (see README) or run the local mock with <code>npm run mock</code>.
+  </p>
+
+  <form class="pf__form" novalidate aria-labelledby="plan-form-title">
+    <h3 id="plan-form-title" class="pf__title">Project details</h3>
+    <p class="pf__hint">Fields marked <span aria-hidden="true">*</span><span class="visually-hidden">with an asterisk</span> are required.</p>
+
+    <div class="pf__row">
+      <div class="pf__field">
+        <label for="pf-name">Full name <span class="req" aria-hidden="true">*</span></label>
+        <input id="pf-name" name="full_name" type="text" autocomplete="name" maxlength="120" aria-required="true" aria-describedby="pf-name-err" />
+        <p class="pf__error" id="pf-name-err" data-error-for="full_name" hidden></p>
+      </div>
+      <div class="pf__field">
+        <label for="pf-business">Business name <span class="req" aria-hidden="true">*</span></label>
+        <input id="pf-business" name="business_name" type="text" autocomplete="organization" maxlength="160" aria-required="true" aria-describedby="pf-business-err" />
+        <p class="pf__error" id="pf-business-err" data-error-for="business_name" hidden></p>
+      </div>
+    </div>
+
+    <div class="pf__field">
+      <label for="pf-type">Business type <span class="req" aria-hidden="true">*</span></label>
+      <div class="pf__select">
+        <select id="pf-type" name="business_type" aria-required="true" aria-describedby="pf-type-err">
+          <option value="">Choose one</option>
+          {businessTypes.map((t) => <option value={t.value}>{t.label}</option>)}
+        </select>
+      </div>
+      <p class="pf__error" id="pf-type-err" data-error-for="business_type" hidden></p>
+    </div>
+
+    <fieldset class="pf__group">
+      <legend>How can Roie reach you? <span class="req" aria-hidden="true">*</span></legend>
+      <p class="pf__help" id="pf-contact-help">Fill in at least one.</p>
+      <div class="pf__row">
+        <div class="pf__field">
+          <label for="pf-email">Email</label>
+          <input id="pf-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="200" aria-describedby="pf-contact-help pf-contact-err" />
+        </div>
+        <div class="pf__field">
+          <label for="pf-phone">Phone / WhatsApp</label>
+          <input id="pf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="40" aria-describedby="pf-contact-help pf-phone-err" />
+          <p class="pf__error" id="pf-phone-err" data-error-for="phone" hidden></p>
+        </div>
+      </div>
+      <p class="pf__error" id="pf-contact-err" data-error-for="email" hidden></p>
+    </fieldset>
+
+    <div class="pf__field">
+      <label for="pf-url">Current website <span class="opt">(optional)</span></label>
+      <input id="pf-url" name="website_url" type="url" inputmode="url" autocomplete="url" maxlength="300" placeholder="yourbusiness.co.il" aria-describedby="pf-url-err" />
+      <p class="pf__error" id="pf-url-err" data-error-for="website_url" hidden></p>
+    </div>
+
+    <div class="pf__field">
+      <label for="pf-message">What would you like help with? <span class="opt">(optional)</span></label>
+      <textarea id="pf-message" name="message" rows="3" maxlength="1000"></textarea>
+    </div>
+
+    <div class="pf__hp" aria-hidden="true">
+      <label for="pf-hp">Leave this field empty</label>
+      <input id="pf-hp" name="hp" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="pf__consent">
+      <input id="pf-consent" name="consent" type="checkbox" aria-required="true" aria-describedby="pf-consent-err" />
+      <label for="pf-consent">I agree that FLAM may use these details to contact me about my project, as described in the <a href="/privacy" target="_blank" rel="noopener">privacy notice</a>. <span class="req" aria-hidden="true">*</span></label>
+    </div>
+    <p class="pf__error" id="pf-consent-err" data-error-for="consent" hidden></p>
+
+    <button type="submit" class="btn btn--primary pf__submit">
+      <span data-label>Send project details</span>
+    </button>
+  </form>
+
+  <div class="pf__panel pf__panel--success" tabindex="-1" hidden data-success>
+    <p class="pf__panel-label">Sent</p>
+    <h3>Thank you. Your project details are in.</h3>
+    <p>Roie will read them personally and reply by email or WhatsApp to arrange a short planning call. There’s no commitment at this stage.</p>
+    <p><a class="link-arrow" href="/about">Meanwhile, read about how FLAM works</a></p>
+  </div>
+
+  <div class="pf__panel pf__panel--failure" tabindex="-1" hidden data-failure>
+    <h3>Your details weren’t sent.</h3>
+    <p>Nothing you typed was lost. Please try again, or send the same details on WhatsApp using the <a href="#contact" class="text-link">contact at the bottom of this page</a>.</p>
+  </div>
+
+  <p class="visually-hidden" aria-live="polite" role="status" data-status></p>
+</div>
+
+<script src="../scripts/form.ts"></script>
+
+<style>
+  .pf { background: var(--surface); border: var(--hairline); border-radius: var(--r-md); padding: clamp(20px, 3.5vw, 40px); }
+  .pf__dev { background: #fff7e0; border: 1px solid #e9cf7a; color: #5c4400; padding: var(--s-3) var(--s-4); border-radius: var(--r-sm); font-size: var(--fs-small); margin-bottom: var(--s-5); }
+  .pf__dev code { font-family: var(--font-mono); font-size: 0.8rem; }
+  .pf__title { font-size: var(--fs-h3); }
+  .pf__hint { color: var(--muted); font-size: var(--fs-small); margin-top: var(--s-1); margin-bottom: var(--s-5); }
+  .pf__form { display: grid; gap: var(--s-5); }
+  .pf__form > .pf__title, .pf__form > .pf__hint { margin-block-end: 0; }
+  .pf__form > .pf__hint { margin-top: calc(var(--s-4) * -1); }
+  .pf__row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4); }
+  .pf__field { display: grid; gap: 6px; align-content: start; }
+  label, legend { font-weight: 500; font-size: 0.95rem; color: var(--ink); }
+  .req { color: var(--accent); }
+  .opt { color: var(--muted); font-weight: 400; }
+  input[type='text'], input[type='email'], input[type='tel'], input[type='url'], select, textarea {
+    width: 100%; min-height: 48px; padding: 10px 14px;
+    background: var(--bg); border: 1px solid var(--line-strong); border-radius: var(--r-sm);
+    font-size: 1rem; line-height: 1.4; transition: border-color 0.15s var(--ease), background-color 0.15s var(--ease);
+  }
+  input::placeholder, textarea::placeholder { color: #8b8f96; }
+  input:hover, select:hover, textarea:hover { border-color: var(--muted); }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); background: var(--surface); }
+  textarea { resize: vertical; min-height: 96px; }
+  [aria-invalid='true'] { border-color: var(--danger) !important; background: var(--danger-soft) !important; }
+  .pf__select { position: relative; }
+  .pf__select select { appearance: none; padding-right: 40px; cursor: pointer; }
+  .pf__select::after {
+    content: ''; position: absolute; right: 16px; top: 50%; width: 8px; height: 8px; pointer-events: none;
+    border-right: 1.5px solid var(--ink-2); border-bottom: 1.5px solid var(--ink-2); transform: translateY(-70%) rotate(45deg);
+  }
+  .pf__group { border: 0; padding: 0; min-width: 0; display: grid; gap: var(--s-3); }
+  .pf__group legend { padding: 0; margin-bottom: 2px; }
+  .pf__help { color: var(--muted); font-size: var(--fs-small); margin-top: -6px; }
+  .pf__group .pf__field label { font-weight: 400; color: var(--ink-2); font-size: var(--fs-small); }
+  .pf__error { color: var(--danger); font-size: var(--fs-small); font-weight: 500; }
+  .pf__error::before { content: '! '; font-weight: 700; }
+  .pf__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .pf__consent { display: grid; grid-template-columns: auto 1fr; gap: var(--s-3); align-items: start; }
+  .pf__consent input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--accent); cursor: pointer; }
+  .pf__consent label { font-weight: 400; color: var(--ink-2); font-size: var(--fs-small); line-height: 1.5; }
+  .pf__consent a { color: var(--accent); text-underline-offset: 2px; }
+  .pf__consent + .pf__error { margin-top: calc(var(--s-4) * -1); padding-left: 32px; }
+  .pf__submit { justify-self: start; min-width: 220px; }
+  .pf__panel { display: grid; gap: var(--s-3); }
+  .pf__panel:focus { outline: none; }
+  .pf__panel h3 { font-size: 1.4rem; }
+  .pf__panel p { color: var(--ink-2); }
+  .pf__panel-label { font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: 0.08em; color: var(--success) !important; display: flex; align-items: center; gap: 8px; }
+  .pf__panel-label::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+  .pf__panel--failure { margin-top: var(--s-5); padding: var(--s-5); border: 1px solid #f0c2bc; background: var(--danger-soft); border-radius: var(--r-sm); }
+  .pf__panel--failure h3 { font-size: 1.1rem; color: var(--danger); }
+    @media (max-width: 560px) {
+    .pf__row { grid-template-columns: 1fr; }
+    .pf__submit { justify-self: stretch; width: 100%; }
+  }
+</style>

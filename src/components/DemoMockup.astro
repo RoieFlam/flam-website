@@ -1,0 +1,195 @@
+---
+// Concept preview of the inquiry dashboard inside the FLAM product. All data is sample data.
+const leads = [
+  { name: 'Dana Example', need: 'Initial assessment', source: 'Website form', status: 'New', when: 'Today, 09:12', active: true },
+  { name: 'Yossi Sample', need: 'Back pain treatment', source: 'WhatsApp', status: 'Contacted', when: 'Yesterday' },
+  { name: 'Maya Demo', need: 'Sports injury', source: 'Website form', status: 'Booked', when: 'Mon' },
+  { name: 'Tom Placeholder', need: 'Package of 5 sessions', source: 'Website form', status: 'Won', when: 'Last week' },
+  { name: 'Noa Test', need: 'Price question', source: 'WhatsApp', status: 'Lost', when: 'Last week' },
+];
+
+const kpis = [
+  { label: 'New', value: '3' },
+  { label: 'Awaiting reply', value: '2' },
+  { label: 'Booked', value: '4' },
+  { label: 'Won this month', value: '6' },
+];
+
+const flow = ['Visitor', 'Your site: form or WhatsApp', 'New inquiry', 'Your dashboard', 'Follow-up and booking'];
+---
+<div class="demo">
+  <ol class="flow" role="list" aria-label="How an inquiry moves">
+    {flow.map((step, i) => (
+      <li class:list={['flow__step', { 'flow__step--app': i >= 3 }]}>
+        <span class="flow__n">{String(i + 1).padStart(2, '0')}</span>
+        <span class="flow__label">{step}</span>
+      </li>
+    ))}
+  </ol>
+
+  <figure class="app">
+    <div class="app__bar">
+      <span class="app__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="app__title">Inquiries · Sample physiotherapy clinic</span>
+      <span class="app__badge">Concept preview — sample data</span>
+    </div>
+
+    <div class="app__body">
+      <div class="app__main">
+        <dl class="kpis">
+          {kpis.map((k) => (
+            <div class="kpi">
+              <dt>{k.label}</dt>
+              <dd>{k.value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <table class="leads">
+          <caption class="visually-hidden">Sample inquiries in a concept dashboard</caption>
+          <thead>
+            <tr>
+              <th scope="col">Lead</th>
+              <th scope="col" class="col-need">Looking for</th>
+              <th scope="col" class="col-source">Source</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="col-when">Received</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leads.map((l) => (
+              <tr class:list={{ 'is-active': l.active }}>
+                <th scope="row">
+                  {l.name}
+                  <span class="leads__sub">{l.need}</span>
+                </th>
+                <td class="col-need">{l.need}</td>
+                <td class="col-source">{l.source}</td>
+                <td><span class={`status status--${l.status.toLowerCase()}`}>{l.status}</span></td>
+                <td class="col-when">{l.when}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="detail" aria-label="Sample lead detail">
+        <p class="detail__label">Lead detail</p>
+        <p class="detail__name">Dana Example</p>
+        <p class="detail__meta">Initial assessment · Website form · Today, 09:12</p>
+        <blockquote class="detail__msg">“Hi, I’d like an assessment for knee pain, ideally next week in the morning.”</blockquote>
+        <dl class="detail__fields">
+          <div><dt>Status</dt><dd><span class="status status--new">New</span></dd></div>
+          <div><dt>Phone</dt><dd>050-000-0000</dd></div>
+        </dl>
+        <div class="detail__next">
+          <p class="detail__label">Next action</p>
+          <p>Call back to book an assessment</p>
+          <p class="detail__due">Due today</p>
+        </div>
+      </aside>
+    </div>
+
+    <figcaption class="app__caption">
+      Concept preview with sample data for an imaginary clinic. Names, numbers and messages are not real. Each client’s dashboard is set up separately, around their own services.
+    </figcaption>
+  </figure>
+</div>
+
+<style>
+  /* Flow strip ---------------------------------------------------- */
+  .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-bottom: var(--s-6); counter-reset: none; }
+  .flow__step {
+    position: relative; display: grid; gap: 6px; padding: var(--s-4) var(--s-5) var(--s-4) 0;
+    border-top: 2px solid var(--line-strong);
+  }
+  .flow__step--app { border-top-color: var(--accent); }
+  .flow__step:not(:last-child)::after {
+    content: '→'; position: absolute; right: var(--s-3); top: var(--s-4); color: var(--muted); font-size: 0.95rem;
+  }
+  .flow__n { font-family: var(--font-mono); font-size: var(--fs-label); color: var(--muted); letter-spacing: 0.06em; }
+  .flow__label { font-weight: 600; font-size: 0.975rem; line-height: 1.3; padding-right: var(--s-5); }
+  .flow__step--app .flow__n { color: var(--accent); }
+
+  /* App window ---------------------------------------------------- */
+  .app { background: var(--d-bg); color: var(--d-text); border-radius: var(--r-md); overflow: hidden; border: 1px solid #000; box-shadow: 0 24px 48px -28px rgba(17, 19, 23, 0.45); }
+  .app__bar { display: flex; align-items: center; gap: var(--s-4); padding: 12px var(--s-5); border-bottom: 1px solid var(--d-line); background: var(--d-panel); font-size: var(--fs-small); }
+  .app__dots { display: flex; gap: 6px; }
+  .app__dots i { width: 10px; height: 10px; border-radius: 50%; background: #3a3f47; }
+  .app__title { color: var(--d-muted); }
+  .app__badge {
+    margin-left: auto; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase;
+    color: #ffd27a; border: 1px solid #5a4a26; background: #2a2416; padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+  }
+  .app__body { display: grid; grid-template-columns: minmax(0, 1fr) 300px; }
+  .app__main { padding: var(--s-5); min-width: 0; }
+
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--d-line); border: 1px solid var(--d-line); border-radius: 8px; overflow: hidden; margin-bottom: var(--s-5); }
+  .kpi { background: var(--d-panel); padding: 14px 16px; }
+  .kpi dt { font-size: 0.78rem; color: var(--d-muted); }
+  .kpi dd { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.02em; margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+  .leads { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .leads th, .leads td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--d-line); vertical-align: middle; }
+  .leads thead th { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--d-muted); padding-top: 0; }
+  .leads tbody th { font-weight: 500; }
+  .leads td { color: #c3c7ce; }
+  .leads tr.is-active { background: #1d2230; }
+  .leads tr.is-active th { box-shadow: inset 2px 0 0 #6d8bff; }
+  .leads__sub { display: none; }
+
+  .status { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 500; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+  .status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .status--new { color: #9db2ff; background: #1e2745; }
+  .status--contacted { color: #f2c46d; background: #3a2f17; }
+  .status--booked { color: #c6a8ff; background: #2e2445; }
+  .status--won { color: #7fd6a4; background: #173528; }
+  .status--lost { color: #a2a7af; background: #2a2d33; }
+
+  .detail { border-left: 1px solid var(--d-line); background: var(--d-panel); padding: var(--s-5); display: grid; gap: var(--s-3); align-content: start; }
+  .detail__label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--d-muted); }
+  .detail__name { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em; }
+  .detail__meta { color: var(--d-muted); font-size: 0.85rem; margin-top: -6px; }
+  .detail__msg { font-size: 0.9rem; color: #c9ccd2; border-left: 2px solid var(--d-line); padding-left: var(--s-3); line-height: 1.5; }
+  .detail__fields { display: grid; gap: 8px; font-size: 0.85rem; padding-block: var(--s-2); border-block: 1px solid var(--d-line); }
+  .detail__fields div { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); }
+  .detail__fields dt { color: var(--d-muted); }
+  .detail__next { background: #1d2230; border: 1px solid #2c3550; border-radius: 8px; padding: 12px 14px; display: grid; gap: 4px; font-size: 0.9rem; }
+  .detail__due { color: #f2c46d; font-size: 0.8rem; }
+
+  .app__caption { padding: 14px var(--s-5); border-top: 1px solid var(--d-line); color: var(--d-muted); font-size: 0.82rem; line-height: 1.5; }
+
+  /* Responsive ---------------------------------------------------- */
+  @media (max-width: 1100px) {
+    .app__body { grid-template-columns: minmax(0, 1fr) 260px; }
+    .col-source { display: none; }
+  }
+  @media (max-width: 900px) {
+    .flow { grid-template-columns: repeat(3, 1fr); row-gap: var(--s-4); }
+    .flow__step:nth-child(3)::after { display: none; }
+    .app__body { grid-template-columns: 1fr; }
+    .detail { border-left: 0; border-top: 1px solid var(--d-line); grid-template-columns: 1fr 1fr; column-gap: var(--s-6); }
+    .detail > .detail__label, .detail__name, .detail__meta, .detail__msg { grid-column: 1; }
+    .detail__fields, .detail__next { grid-column: 2; }
+    .detail__fields { grid-row: 1 / span 2; align-self: start; }
+    .detail__next { grid-row: 3 / span 2; align-self: start; }
+  }
+  @media (max-width: 640px) {
+    .flow { grid-template-columns: 1fr; row-gap: 0; }
+    .flow__step { grid-template-columns: 32px 1fr; align-items: baseline; border-top: 0; border-left: 2px solid var(--line-strong); padding: 10px 0 10px var(--s-4); }
+    .flow__step--app { border-left-color: var(--accent); }
+    .flow__step::after { display: none !important; }
+    .app__bar { flex-wrap: wrap; gap: 8px var(--s-3); padding: 12px var(--s-4); }
+    .app__dots { display: none; }
+    .app__badge { margin-left: 0; order: -1; }
+    .app__main { padding: var(--s-4); }
+    .kpis { grid-template-columns: 1fr 1fr; }
+    .col-need, .col-when { display: none; }
+    .leads__sub { display: block; color: var(--d-muted); font-size: 0.8rem; font-weight: 400; margin-top: 2px; }
+    .leads th, .leads td { padding: 10px 6px; }
+    .leads tbody tr:nth-child(n + 5) { display: none; }
+    .detail { grid-template-columns: 1fr; padding: var(--s-4); }
+    .detail > * { grid-column: 1 !important; grid-row: auto !important; }
+    .app__caption { padding: 12px var(--s-4); }
+  }
+</style>

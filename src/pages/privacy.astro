@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config/site';
+---
+<Base title="Privacy notice" description="What the FLAM website collects through its project form and analytics, why, and how to ask for your data to be corrected or deleted.">
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Privacy</p>
+      <h1 class="privacy__title">Privacy notice</h1>
+      <p class="privacy__updated">Last updated: October 2026</p>
+
+      <div class="prose">
+        <p>This notice explains what this website collects, why, and what you can ask FLAM to do with it. It’s written to be short and plain.</p>
+
+        <h2>Who is responsible</h2>
+        <p>This website is run by FLAM, led by {site.founder}. You can reach FLAM on WhatsApp using the contact details at the <a href="#contact">bottom of this page</a>.</p>
+
+        <h2>The “Plan your project” form</h2>
+        <p>If you send the form, FLAM receives:</p>
+        <ul>
+          <li>your name and business name, and your business type;</li>
+          <li>your email and/or phone / WhatsApp number;</li>
+          <li>your current website address and your message, if you add them;</li>
+          <li>your consent, the page you sent the form from, the website or campaign that brought you here (referrer and UTM tags, if any), and the time you sent it.</li>
+        </ul>
+        <p><strong>Why:</strong> only to reply to you and plan a possible project. FLAM doesn’t sell your details, add you to marketing lists, or share them with other clients.</p>
+
+        <h2>Website analytics</h2>
+        <p>The site records a small set of anonymous events: page views, clicks on “Plan your project” and WhatsApp links, starting and sending the form, and scrolling most of the way down a page. Each event includes the page, the referring site or campaign tags, a device category (mobile, tablet or desktop), and a random session ID.</p>
+        <ul>
+          <li><strong>No cookies</strong> and no third-party trackers or advertising tools.</li>
+          <li>The random session ID is kept in your browser’s session storage and disappears when you close the tab.</li>
+          <li>Analytics events never include your name, email, phone or message.</li>
+        </ul>
+        <p><strong>Why:</strong> to understand which pages are useful and whether the form works, so the site can be improved.</p>
+
+        <h2>Where the data is kept</h2>
+        <p>Form submissions and analytics events are stored in FLAM’s private systems. Only FLAM can access them.</p>
+
+        <h2>How long it’s kept</h2>
+        <p>Form details are kept for as long as they’re needed to reply to you and, if you become a client, to run your project. Anonymous analytics events are kept to see trends over time. You can ask for your form details to be deleted at any time.</p>
+
+        <h2>Your choices</h2>
+        <p>You can ask FLAM to show, correct or delete the details you sent through the form by messaging FLAM on WhatsApp, using the contact details at the <a href="#contact">bottom of this page</a>.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .privacy__title { font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.25rem); letter-spacing: -0.03em; }
+  .privacy__updated { color: var(--muted); font-size: var(--fs-small); margin-top: var(--s-3); margin-bottom: var(--s-7); font-family: var(--font-mono); }
+</style>

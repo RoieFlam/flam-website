@@ -1,0 +1,13 @@
+---
+interface Props { class?: string }
+const { class: className } = Astro.props;
+---
+<a href="/" class:list={['logo', className]} aria-label="FLAM, home">
+  <img src="/logo-flam.png" alt="FLAM" width="133" height="26" />
+</a>
+
+<style>
+  .logo { display: inline-flex; align-items: center; min-height: 44px; }
+  .logo img { height: 26px; width: auto; }
+  @media (max-width: 480px) { .logo img { height: 22px; } }
+</style>
