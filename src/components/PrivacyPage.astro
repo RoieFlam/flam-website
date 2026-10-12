@@ -1,8 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site } from '../config/site';
+import { getTranslations, type Locale } from '../i18n';
+
+interface Props { locale?: Locale }
+const { locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
 ---
-<Base title="Privacy notice" description="What the FLAM website collects through its project form and analytics, why, and how to ask for your data to be corrected or deleted.">
+<Base title={t.meta.privacy.title} description={t.meta.privacy.description} locale={locale} page="privacy">
   <section class="section">
     <div class="container">
       <p class="eyebrow">Privacy</p>
@@ -51,3 +56,4 @@ import { site } from '../config/site';
   .privacy__title { font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.25rem); letter-spacing: -0.03em; }
   .privacy__updated { color: var(--muted); font-size: var(--fs-small); margin-top: var(--s-3); margin-bottom: var(--s-7); font-family: var(--font-mono); }
 </style>
+

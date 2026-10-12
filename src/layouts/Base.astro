@@ -5,29 +5,41 @@ import '@fontsource/ibm-plex-mono/latin-500.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import TranslationNotice from '../components/TranslationNotice.astro';
 import { site } from '../config/site';
+import { getTranslations, localeMetadata, localizedPath, type Locale, type PageKey } from '../i18n';
 
 interface Props {
   title: string;
   description?: string;
   noindex?: boolean;
+  locale?: Locale;
+  page?: PageKey;
 }
 
-const { title, description = site.description, noindex = false } = Astro.props;
+const { title, description = site.description, noindex = false, locale = 'en', page = 'home' } = Astro.props;
+const t = getTranslations(locale);
+const localeInfo = localeMetadata[locale];
 const fullTitle = title === site.name ? `${site.name} · ${site.tagline}` : `${title} · ${site.name}`;
 const canonical = new URL(Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/') || '/', Astro.site);
 const ogImage = new URL(site.ogImage, Astro.site);
+const alternateLocales = (['he', 'en'] as const).map((alternateLocale) => ({
+  ...localeMetadata[alternateLocale],
+  href: new URL(localizedPath(alternateLocale, page), Astro.site),
+}));
 // Until a production SITE_URL is configured, keep every build out of search indexes.
 const indexable = Boolean(import.meta.env.SITE_URL) && !noindex;
 ---
 <!doctype html>
-<html lang="en">
+<html lang={localeInfo.htmlLang} dir={localeInfo.dir}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {alternateLocales.map((alternate) => <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(localizedPath('he', page), Astro.site)} />
     {!indexable && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#f6f5f1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -36,6 +48,7 @@ const indexable = Boolean(import.meta.env.SITE_URL) && !noindex;
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
+    <meta property="og:locale" content={locale === 'he' ? 'he_IL' : 'en_US'} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
@@ -43,12 +56,13 @@ const indexable = Boolean(import.meta.env.SITE_URL) && !noindex;
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
-    <Header />
+    <a class="skip-link" href="#main">{t.accessibility.skipToContent}</a>
+    <Header locale={locale} page={page} />
+    <TranslationNotice locale={locale} page={page} />
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <Footer />
+    <Footer locale={locale} />
     <script src="../scripts/analytics.ts"></script>
   </body>
 </html>

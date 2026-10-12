@@ -1,40 +1,45 @@
 ---
 import WhatsAppButton from './WhatsAppButton.astro';
 import { site } from '../config/site';
+import { getTranslations, localizedPath, type Locale } from '../i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = getTranslations(locale);
 const year = new Date().getFullYear();
 ---
 <footer class="site-footer" id="contact">
   <div class="container site-footer__grid">
     <div class="site-footer__brand">
-      <a href="/" class="site-footer__logo" aria-label="FLAM, home"><img src="/logo-flam-full.png" alt="FLAM: Strategy, Web, Automation" width="272" height="72"  /></a>
-      <p>Digital presence for small service businesses and clinics, built and managed by FLAM. Led by {site.founder}.</p>
+      <a href={localizedPath(locale, 'home')} class="site-footer__logo" aria-label={t.accessibility.home}><img src="/logo-flam-full.png" alt="FLAM: Strategy, Web, Automation" width="272" height="72" /></a>
+      <p>{t.footer.brand}</p>
     </div>
-    <nav aria-label="Footer">
-      <h2 class="site-footer__title">Site</h2>
+    <nav aria-label={t.navigation.footer}>
+      <h2 class="site-footer__title">{t.footer.site}</h2>
       <ul role="list">
-        <li><a href="/#product">Product</a></li>
-        <li><a href="/#how-it-works">How it works</a></li>
-        <li><a href="/about">About</a></li>
+        <li><a href={localizedPath(locale, 'home', '#product')}>{t.navigation.product}</a></li>
+        <li><a href={localizedPath(locale, 'home', '#how-it-works')}>{t.navigation.howItWorks}</a></li>
+        <li><a href={localizedPath(locale, 'about')}>{t.navigation.about}</a></li>
       </ul>
     </nav>
     <div>
-      <h2 class="site-footer__title">Contact</h2>
+      <h2 class="site-footer__title">{t.footer.contact}</h2>
       <ul role="list">
-        <li><a href="/#plan" data-cta="footer_plan">Plan your project</a></li>
+        <li><a href={localizedPath(locale, 'home', '#plan')} data-cta="footer_plan">{t.navigation.plan}</a></li>
       </ul>
     </div>
   </div>
   <div class="container">
     <div class="site-footer__band">
       <div>
-        <p class="site-footer__band-title">Prefer to talk on WhatsApp?</p>
-        <p class="site-footer__band-num nowrap">{site.whatsapp.display}</p>
+        <p class="site-footer__band-title">{t.footer.whatsappPrompt}</p>
+        <p class="site-footer__band-num nowrap" dir="ltr">{site.whatsapp.display}</p>
       </div>
-      <WhatsAppButton id="footer" />
+      <WhatsAppButton id="footer" label={t.footer.whatsapp} ariaLabel={t.footer.whatsappAria} />
     </div>
     <div class="site-footer__base">
-      <p>© {year} FLAM. All rights reserved.</p>
-      <p><a href="/privacy">Privacy notice</a></p>
+      <p>© {year} FLAM. {t.footer.rights}</p>
+      <p><a href={localizedPath(locale, 'privacy')}>{t.navigation.privacy}</a></p>
     </div>
   </div>
 </footer>
@@ -49,15 +54,9 @@ const year = new Date().getFullYear();
   .site-footer__band { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-4) var(--s-6); padding: var(--s-5) var(--s-6); margin-bottom: var(--s-6); background: var(--surface); border: var(--hairline); border-radius: var(--r-md); }
   .site-footer__band-title { font-weight: 600; font-size: 1.1rem; letter-spacing: -0.01em; }
   .site-footer__band-num { color: var(--muted); font-size: var(--fs-small); font-variant-numeric: tabular-nums; margin-top: 2px; }
-  @media (max-width: 560px) {
-    .site-footer__band { padding: var(--s-5); }
-    .site-footer__band :global(.btn) { width: 100%; }
-  }
+  @media (max-width: 560px) { .site-footer__band { padding: var(--s-5); } .site-footer__band :global(.btn) { width: 100%; } }
   .site-footer a:not(.btn):not(.site-footer__logo) { color: var(--ink-2); text-decoration: none; font-size: 0.95rem; display: inline-block; padding-block: 2px; }
   .site-footer a:not(.btn):not(.site-footer__logo):hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
   .site-footer__base { display: flex; justify-content: space-between; gap: var(--s-4); flex-wrap: wrap; border-top: var(--hairline); padding-block: var(--s-5); font-size: var(--fs-small); color: var(--muted); }
-  @media (max-width: 760px) {
-    .site-footer__grid { grid-template-columns: 1fr 1fr; }
-    .site-footer__brand { grid-column: 1 / -1; }
-  }
+  @media (max-width: 760px) { .site-footer__grid { grid-template-columns: 1fr 1fr; } .site-footer__brand { grid-column: 1 / -1; } }
 </style>

@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 
-const paths = ['/', '/about', '/privacy'];
+const paths = ['/he/', '/he/about/', '/he/privacy/', '/en/', '/en/about/', '/en/privacy/'];
 
 export const GET: APIRoute = ({ site }) => {
   const urls = paths.map((p) => `  <url><loc>${new URL(p, site)}</loc></url>`).join('\n');

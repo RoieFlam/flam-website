@@ -1,0 +1,23 @@
+---
+import type { Locale, PageKey } from '../i18n';
+import { getTranslations } from '../i18n';
+
+interface Props { locale: Locale; page: PageKey }
+const { locale, page } = Astro.props;
+const notice = getTranslations(locale).translationNotice?.[page];
+---
+
+{notice && (
+  <aside class="translation-notice" role="status">
+    <div class="container translation-notice__inner">
+      <strong>{notice.label}</strong>
+      <span>{notice.text}</span>
+    </div>
+  </aside>
+)}
+
+<style>
+  .translation-notice { background: var(--accent-soft); border-bottom: 1px solid #c4d6f8; color: var(--ink-2); }
+  .translation-notice__inner { display: flex; gap: var(--s-3); align-items: baseline; padding-block: var(--s-2); font-size: var(--fs-small); }
+  .translation-notice strong { color: var(--accent); white-space: nowrap; }
+</style>

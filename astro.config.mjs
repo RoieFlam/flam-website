@@ -9,6 +9,14 @@ const { SITE_URL } = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd()
 export default defineConfig({
   site: SITE_URL || 'http://localhost:4321',
   output: 'static',
-  trailingSlash: 'never',
-  build: { format: 'file' },
+  trailingSlash: 'always',
+  i18n: {
+    locales: ['he', 'en'],
+    defaultLocale: 'he',
+    routing: {
+      prefixDefaultLocale: true,
+      redirectToDefaultLocale: false,
+    },
+  },
+  build: { format: 'directory' },
 });

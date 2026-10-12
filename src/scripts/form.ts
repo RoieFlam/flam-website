@@ -27,6 +27,10 @@ function isValidUrl(value: string): boolean {
 }
 
 export function initProjectForm(root: HTMLElement) {
+  const copy = JSON.parse(root.dataset.formCopy ?? '{}') as {
+    name: string; business: string; type: string; contact: string; email: string; phone: string; url: string; consent: string;
+    fixOne: string; fixMany: string; sending: string; sendingStatus: string; submit: string; failed: string; noEndpoint: string; retry: string; success: string;
+  };
   const form = root.querySelector<HTMLFormElement>('form')!;
   const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
   const submitLabel = submit.querySelector<HTMLElement>('[data-label]')!;
@@ -54,28 +58,28 @@ export function initProjectForm(root: HTMLElement) {
   function validate(name: FieldName): string {
     switch (name) {
       case 'full_name':
-        return value('full_name') ? '' : 'Please enter your name.';
+        return value('full_name') ? '' : copy.name;
       case 'business_name':
-        return value('business_name') ? '' : 'Please enter your business name.';
+        return value('business_name') ? '' : copy.business;
       case 'business_type':
-        return value('business_type') ? '' : 'Please choose the closest business type.';
+        return value('business_type') ? '' : copy.type;
       case 'email': {
         const email = value('email');
-        if (!email && !value('phone')) return 'Add an email or a phone / WhatsApp number so Roie can reply.';
-        if (email && !EMAIL_RE.test(email)) return 'This email address looks incomplete.';
+        if (!email && !value('phone')) return copy.contact;
+        if (email && !EMAIL_RE.test(email)) return copy.email;
         return '';
       }
       case 'phone': {
         const phone = value('phone');
-        if (phone && !PHONE_RE.test(phone)) return 'Use digits only, for example 054-123-4567.';
+        if (phone && !PHONE_RE.test(phone)) return copy.phone;
         return '';
       }
       case 'website_url': {
         const url = value('website_url');
-        return url && !isValidUrl(url) ? 'This doesn’t look like a web address. You can also leave it empty.' : '';
+        return url && !isValidUrl(url) ? copy.url : '';
       }
       case 'consent':
-        return field('consent')?.checked ? '' : 'Please confirm you agree to the privacy notice.';
+        return field('consent')?.checked ? '' : copy.consent;
     }
   }
 
@@ -115,12 +119,12 @@ export function initProjectForm(root: HTMLElement) {
   function setLoading(loading: boolean) {
     submit.disabled = loading;
     form.setAttribute('aria-busy', String(loading));
-    submitLabel.textContent = loading ? 'Sending…' : 'Send project details';
+    submitLabel.textContent = loading ? copy.sending : copy.submit;
   }
 
   function showFailure(reason: string) {
     failure.hidden = false;
-    status.textContent = 'Your details were not sent. ' + reason;
+    status.textContent = copy.failed + ' ' + reason;
     failure.focus();
   }
 
@@ -131,7 +135,7 @@ export function initProjectForm(root: HTMLElement) {
 
     const invalid = fields.filter((f) => !check(f));
     if (invalid.length) {
-      status.textContent = `Please fix ${invalid.length === 1 ? '1 field' : `${invalid.length} fields`} before sending.`;
+      status.textContent = invalid.length === 1 ? copy.fixOne : copy.fixMany.replace('{count}', String(invalid.length));
       field(invalid[0])?.focus();
       return;
     }
@@ -155,12 +159,12 @@ export function initProjectForm(root: HTMLElement) {
     if (!ENDPOINT) {
       if (import.meta.env.DEV) console.warn('[form] PUBLIC_LEAD_ENDPOINT is not set. Payload:', payload);
       track('form_submit_error', 'no_endpoint');
-      showFailure('The online form isn’t connected yet.');
+      showFailure(copy.noEndpoint);
       return;
     }
 
     setLoading(true);
-    status.textContent = 'Sending your details…';
+    status.textContent = copy.sendingStatus;
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), TIMEOUT_MS);
 
@@ -180,12 +184,12 @@ export function initProjectForm(root: HTMLElement) {
       track('form_submit_success');
       form.hidden = true;
       success.hidden = false;
-      status.textContent = 'Thanks, your project details were sent.';
+      status.textContent = copy.success;
       success.focus();
     } catch (err) {
       const reason = err instanceof DOMException && err.name === 'AbortError' ? 'timeout' : 'request_failed';
       track('form_submit_error', reason);
-      showFailure('Please try again, or use the WhatsApp contact at the bottom of the page.');
+      showFailure(copy.retry);
     } finally {
       window.clearTimeout(timer);
       setLoading(false);

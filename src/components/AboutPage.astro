@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import { getTranslations, localizedPath, type Locale } from '../i18n';
+
+interface Props { locale?: Locale }
+const { locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
+const copy = t.about;
+---
+
+<Base title={t.meta.about.title} description={t.meta.about.description} locale={locale} page="about">
+  <section class="about-founder" aria-labelledby="founder-title">
+    <div class="container about-founder__grid">
+      <div class="about-founder__content">
+        <h1 id="founder-title" class="about-founder__heading">{copy.founder.heading}</h1>
+        <p class="about-founder__intro">{copy.founder.introBefore}<strong>{copy.founder.name}</strong>{copy.founder.introAfter}</p>
+        <div class="about-founder__copy">
+          {copy.founder.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+      </div>
+      <figure class="about-founder__portrait">
+        <img
+          src="/images/roie-flam-about.jpg"
+          alt={copy.founder.imageAlt}
+          width="1122"
+          height="1402"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+    </div>
+  </section>
+
+  <section class="about-studio" aria-labelledby="about-title">
+    <div class="container about-studio__inner">
+      <h2 id="about-title" class="about-studio__heading">{copy.intro.heading}</h2>
+      <p class="about-studio__title">{copy.intro.title}</p>
+      <div class="about-studio__copy">
+        {copy.intro.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <div class="about-studio__cta">
+      <a href={localizedPath(locale, 'home', '#plan')} class="btn btn--primary" data-cta="about_plan">{copy.cta.label}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .about-founder { padding-block: clamp(48px, 5vw, 64px) 0; }
+  .about-founder__grid { display: grid; direction: ltr; grid-template-areas: 'content portrait'; grid-template-columns: minmax(0, 760px) 280px; column-gap: clamp(48px, 4vw, 64px); align-items: start; justify-content: start; max-width: 1200px; margin-inline: auto; }
+  .about-founder__content { grid-area: content; display: grid; gap: var(--s-3); max-width: 760px; text-align: start; }
+  .about-founder__intro { color: var(--ink); font-size: 1.125rem; line-height: 1.55; }
+  .about-founder__copy { display: grid; gap: var(--s-3); color: var(--ink-2); font-size: 1.0625rem; line-height: 1.7; }
+  .about-founder__portrait { grid-area: portrait; width: 100%; max-width: 280px; margin: 0; justify-self: end; }
+  .about-founder__portrait img { display: block; width: 100%; height: auto; object-fit: contain; border-radius: var(--r-md); }
+
+  :global([dir='rtl']) .about-founder__grid { grid-template-areas: 'portrait content'; grid-template-columns: 280px minmax(0, 760px); justify-content: end; }
+  :global([dir='rtl']) .about-founder__content { direction: rtl; }
+
+  .about-studio { padding-block: 0 clamp(48px, 6vw, 72px); }
+  .about-studio__inner { display: grid; gap: var(--s-3); max-width: 1200px; margin-inline: auto; text-align: start; }
+  .about-studio__heading, .about-studio__title, .about-studio__copy, .about-studio__cta { width: min(100%, 760px); margin-inline-end: auto; }
+  .about-founder__heading, .about-studio__heading { font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.12; }
+  .about-studio__title { color: var(--ink); font-size: clamp(1.05rem, 1rem + 0.25vw, 1.2rem); font-weight: 600; line-height: 1.45; }
+  .about-studio__copy { display: grid; gap: var(--s-3); color: var(--ink-2); font-size: 1.0625rem; line-height: 1.7; }
+  .about-studio__cta { margin-top: var(--s-4); }
+
+  @media (max-width: 840px) {
+    .about-founder { padding-block: var(--s-6) 0; }
+    .about-founder__grid { grid-template-areas: 'content' 'portrait'; grid-template-columns: 1fr; gap: var(--s-5); }
+    .about-founder__portrait { width: min(100%, 280px); justify-self: start; }
+    :global([dir='rtl']) .about-founder__grid { grid-template-areas: 'content' 'portrait'; grid-template-columns: 1fr; justify-content: stretch; }
+    :global([dir='rtl']) .about-founder__portrait { justify-self: end; }
+    .about-studio { padding-block: 0 var(--s-6); }
+  }
+
+  @media (max-width: 420px) {
+    .about-founder { padding-block-start: var(--s-5); }
+    .about-founder__copy, .about-studio__copy { font-size: 1rem; }
+    .about-founder__portrait { width: min(100%, 270px); }
+  }
+</style>

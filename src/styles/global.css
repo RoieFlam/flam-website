@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'Noto Sans Hebrew';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/noto-sans-hebrew/NotoSansHebrew-Hebrew.woff2') format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+
 /* ---------------------------------------------------------------
    FLAM v2 — design tokens and base styles
    --------------------------------------------------------------- */
@@ -31,6 +40,7 @@
 
   /* Type */
   --font-sans: 'Instrument Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-hebrew: 'Noto Sans Hebrew', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
   --fs-display: clamp(2.5rem, 1.55rem + 3.6vw, 4.5rem);
   --fs-h2: clamp(1.85rem, 1.35rem + 1.9vw, 2.9rem);
@@ -63,6 +73,8 @@
 
   --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
 }
+
+html:lang(he) { --font-sans: var(--font-hebrew); }
 
 @media (max-width: 1100px) {
   :root { --section: var(--s-9); }
@@ -104,7 +116,7 @@ ul[role='list'], ol[role='list'] { list-style: none; padding: 0; }
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 .skip-link {
-  position: absolute; left: var(--s-4); top: -100px; z-index: 100;
+  position: absolute; inset-inline-start: var(--s-4); top: -100px; z-index: 100;
   background: var(--ink); color: var(--bg); padding: var(--s-2) var(--s-4); border-radius: var(--r-sm);
   text-decoration: none; font-weight: 500;
 }
@@ -155,6 +167,8 @@ ul[role='list'], ol[role='list'] { list-style: none; padding: 0; }
 }
 .link-arrow::after { content: '→'; transition: transform 0.15s var(--ease); }
 .link-arrow:hover::after { transform: translateX(3px); }
+:dir(rtl) .link-arrow::after { content: '←'; }
+:dir(rtl) .link-arrow:hover::after { transform: translateX(-3px); }
 
 .text-link { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .text-link:hover { text-decoration-thickness: 2px; }
@@ -169,7 +183,7 @@ ul[role='list'], ol[role='list'] { list-style: none; padding: 0; }
 .prose > * + * { margin-top: var(--s-4); }
 .prose h2 { font-size: 1.5rem; margin-top: var(--s-7); }
 .prose h3 { font-size: var(--fs-h3); margin-top: var(--s-6); }
-.prose ul { padding-left: 1.2em; }
+.prose ul { padding-inline-start: 1.2em; }
 .prose li + li { margin-top: var(--s-2); }
 .prose a { color: var(--accent); text-underline-offset: 3px; }
 .prose p, .prose li { color: var(--ink-2); }

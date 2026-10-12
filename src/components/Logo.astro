@@ -1,8 +1,12 @@
 ---
-interface Props { class?: string }
-const { class: className } = Astro.props;
+import type { Locale } from '../i18n';
+import { getTranslations, localizedPath } from '../i18n';
+
+interface Props { class?: string; locale: Locale }
+const { class: className, locale } = Astro.props;
+const t = getTranslations(locale);
 ---
-<a href="/" class:list={['logo', className]} aria-label="FLAM, home">
+<a href={localizedPath(locale, 'home')} class:list={['logo', className]} aria-label={t.accessibility.home}>
   <img src="/logo-flam.png" alt="FLAM" width="133" height="26" />
 </a>
 

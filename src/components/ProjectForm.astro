@@ -1,59 +1,55 @@
 ---
-import { site } from '../config/site';
+import { getTranslations, localizedPath, type Locale } from '../i18n';
 
-const businessTypes = [
-  { value: 'clinic', label: 'Clinic' },
-  { value: 'beauty_wellness', label: 'Beauty / wellness' },
-  { value: 'trades_home_services', label: 'Trades / home services' },
-  { value: 'professional_services', label: 'Professional services' },
-  { value: 'other', label: 'Other' },
-];
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const copy = t.form;
 ---
-<div class="pf" data-project-form>
+<div class="pf" data-project-form data-form-copy={JSON.stringify(copy.client)}>
   <p class="pf__dev" hidden data-dev-warning role="note">
-    <strong>Dev only:</strong> <code>PUBLIC_LEAD_ENDPOINT</code> is not set, so this form won’t send anything.
-    Set it in <code>.env</code> (see README) or run the local mock with <code>npm run mock</code>.
+    <strong>{copy.dev.prefix}</strong> {copy.dev.text}
   </p>
 
   <form class="pf__form" novalidate aria-labelledby="plan-form-title">
-    <h3 id="plan-form-title" class="pf__title">Project details</h3>
-    <p class="pf__hint">Fields marked <span aria-hidden="true">*</span><span class="visually-hidden">with an asterisk</span> are required.</p>
+    <h3 id="plan-form-title" class="pf__title">{copy.title}</h3>
+    <p class="pf__hint">{copy.requiredHint} <span aria-hidden="true">*</span><span class="visually-hidden"> {copy.requiredWord}</span> {copy.requiredAfter}</p>
 
     <div class="pf__row">
       <div class="pf__field">
-        <label for="pf-name">Full name <span class="req" aria-hidden="true">*</span></label>
+        <label for="pf-name">{copy.fullName} <span class="req" aria-hidden="true">*</span></label>
         <input id="pf-name" name="full_name" type="text" autocomplete="name" maxlength="120" aria-required="true" aria-describedby="pf-name-err" />
         <p class="pf__error" id="pf-name-err" data-error-for="full_name" hidden></p>
       </div>
       <div class="pf__field">
-        <label for="pf-business">Business name <span class="req" aria-hidden="true">*</span></label>
+        <label for="pf-business">{copy.businessName} <span class="req" aria-hidden="true">*</span></label>
         <input id="pf-business" name="business_name" type="text" autocomplete="organization" maxlength="160" aria-required="true" aria-describedby="pf-business-err" />
         <p class="pf__error" id="pf-business-err" data-error-for="business_name" hidden></p>
       </div>
     </div>
 
     <div class="pf__field">
-      <label for="pf-type">Business type <span class="req" aria-hidden="true">*</span></label>
+      <label for="pf-type">{copy.businessType} <span class="req" aria-hidden="true">*</span></label>
       <div class="pf__select">
         <select id="pf-type" name="business_type" aria-required="true" aria-describedby="pf-type-err">
-          <option value="">Choose one</option>
-          {businessTypes.map((t) => <option value={t.value}>{t.label}</option>)}
+          <option value="">{copy.chooseType}</option>
+          {copy.businessTypes.map((type) => <option value={type.value}>{type.label}</option>)}
         </select>
       </div>
       <p class="pf__error" id="pf-type-err" data-error-for="business_type" hidden></p>
     </div>
 
     <fieldset class="pf__group">
-      <legend>How can Roie reach you? <span class="req" aria-hidden="true">*</span></legend>
-      <p class="pf__help" id="pf-contact-help">Fill in at least one.</p>
+      <legend>{copy.contactLegend} <span class="req" aria-hidden="true">*</span></legend>
+      <p class="pf__help" id="pf-contact-help">{copy.contactHelp}</p>
       <div class="pf__row">
         <div class="pf__field">
-          <label for="pf-email">Email</label>
-          <input id="pf-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="200" aria-describedby="pf-contact-help pf-contact-err" />
+          <label for="pf-email">{copy.email}</label>
+          <input id="pf-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="200" aria-describedby="pf-contact-help pf-contact-err" dir="ltr" />
         </div>
         <div class="pf__field">
-          <label for="pf-phone">Phone / WhatsApp</label>
-          <input id="pf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="40" aria-describedby="pf-contact-help pf-phone-err" />
+          <label for="pf-phone">{copy.phone}</label>
+          <input id="pf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="40" aria-describedby="pf-contact-help pf-phone-err" dir="ltr" />
           <p class="pf__error" id="pf-phone-err" data-error-for="phone" hidden></p>
         </div>
       </div>
@@ -61,42 +57,42 @@ const businessTypes = [
     </fieldset>
 
     <div class="pf__field">
-      <label for="pf-url">Current website <span class="opt">(optional)</span></label>
-      <input id="pf-url" name="website_url" type="url" inputmode="url" autocomplete="url" maxlength="300" placeholder="yourbusiness.co.il" aria-describedby="pf-url-err" />
+      <label for="pf-url">{copy.website} <span class="opt">({copy.optionalWord})</span></label>
+      <input id="pf-url" name="website_url" type="url" inputmode="url" autocomplete="url" maxlength="300" placeholder={copy.websitePlaceholder} aria-describedby="pf-url-err" dir="ltr" />
       <p class="pf__error" id="pf-url-err" data-error-for="website_url" hidden></p>
     </div>
 
     <div class="pf__field">
-      <label for="pf-message">What would you like help with? <span class="opt">(optional)</span></label>
+      <label for="pf-message">{copy.message} <span class="opt">({copy.optionalWord})</span></label>
       <textarea id="pf-message" name="message" rows="3" maxlength="1000"></textarea>
     </div>
 
     <div class="pf__hp" aria-hidden="true">
-      <label for="pf-hp">Leave this field empty</label>
+      <label for="pf-hp">{copy.honeypot}</label>
       <input id="pf-hp" name="hp" type="text" tabindex="-1" autocomplete="off" />
     </div>
 
     <div class="pf__consent">
       <input id="pf-consent" name="consent" type="checkbox" aria-required="true" aria-describedby="pf-consent-err" />
-      <label for="pf-consent">I agree that FLAM may use these details to contact me about my project, as described in the <a href="/privacy" target="_blank" rel="noopener">privacy notice</a>. <span class="req" aria-hidden="true">*</span></label>
+      <label for="pf-consent">{copy.consentBefore} <a href={localizedPath(locale, 'privacy')} target="_blank" rel="noopener">{copy.consentLink}</a>{copy.consentAfter} <span class="req" aria-hidden="true">*</span></label>
     </div>
     <p class="pf__error" id="pf-consent-err" data-error-for="consent" hidden></p>
 
     <button type="submit" class="btn btn--primary pf__submit">
-      <span data-label>Send project details</span>
+      <span data-label>{copy.submit}</span>
     </button>
   </form>
 
   <div class="pf__panel pf__panel--success" tabindex="-1" hidden data-success>
-    <p class="pf__panel-label">Sent</p>
-    <h3>Thank you. Your project details are in.</h3>
-    <p>Roie will read them personally and reply by email or WhatsApp to arrange a short planning call. There’s no commitment at this stage.</p>
-    <p><a class="link-arrow" href="/about">Meanwhile, read about how FLAM works</a></p>
+    <p class="pf__panel-label">{copy.success.label}</p>
+    <h3>{copy.success.title}</h3>
+    <p>{copy.success.text}</p>
+    <p><a class="link-arrow" href={localizedPath(locale, 'about')}>{copy.success.link}</a></p>
   </div>
 
   <div class="pf__panel pf__panel--failure" tabindex="-1" hidden data-failure>
-    <h3>Your details weren’t sent.</h3>
-    <p>Nothing you typed was lost. Please try again, or send the same details on WhatsApp using the <a href="#contact" class="text-link">contact at the bottom of this page</a>.</p>
+    <h3>{copy.failure.title}</h3>
+    <p>{copy.failure.before} <a href="#contact" class="text-link">{copy.failure.link}</a>{copy.failure.after}</p>
   </div>
 
   <p class="visually-hidden" aria-live="polite" role="status" data-status></p>
@@ -129,23 +125,24 @@ const businessTypes = [
   textarea { resize: vertical; min-height: 96px; }
   [aria-invalid='true'] { border-color: var(--danger) !important; background: var(--danger-soft) !important; }
   .pf__select { position: relative; }
-  .pf__select select { appearance: none; padding-right: 40px; cursor: pointer; }
+  .pf__select select { appearance: none; padding-inline-end: 40px; cursor: pointer; }
   .pf__select::after {
-    content: ''; position: absolute; right: 16px; top: 50%; width: 8px; height: 8px; pointer-events: none;
+    content: ''; position: absolute; inset-inline-end: 16px; top: 50%; width: 8px; height: 8px; pointer-events: none;
     border-right: 1.5px solid var(--ink-2); border-bottom: 1.5px solid var(--ink-2); transform: translateY(-70%) rotate(45deg);
   }
+  :dir(rtl) .pf__select::after { transform: translateY(-70%) rotate(135deg); }
   .pf__group { border: 0; padding: 0; min-width: 0; display: grid; gap: var(--s-3); }
   .pf__group legend { padding: 0; margin-bottom: 2px; }
   .pf__help { color: var(--muted); font-size: var(--fs-small); margin-top: -6px; }
   .pf__group .pf__field label { font-weight: 400; color: var(--ink-2); font-size: var(--fs-small); }
   .pf__error { color: var(--danger); font-size: var(--fs-small); font-weight: 500; }
   .pf__error::before { content: '! '; font-weight: 700; }
-  .pf__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .pf__hp { position: absolute; inset-inline-start: -9999px; width: 1px; height: 1px; overflow: hidden; }
   .pf__consent { display: grid; grid-template-columns: auto 1fr; gap: var(--s-3); align-items: start; }
   .pf__consent input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--accent); cursor: pointer; }
   .pf__consent label { font-weight: 400; color: var(--ink-2); font-size: var(--fs-small); line-height: 1.5; }
   .pf__consent a { color: var(--accent); text-underline-offset: 2px; }
-  .pf__consent + .pf__error { margin-top: calc(var(--s-4) * -1); padding-left: 32px; }
+  .pf__consent + .pf__error { margin-top: calc(var(--s-4) * -1); padding-inline-start: 32px; }
   .pf__submit { justify-self: start; min-width: 220px; }
   .pf__panel { display: grid; gap: var(--s-3); }
   .pf__panel:focus { outline: none; }

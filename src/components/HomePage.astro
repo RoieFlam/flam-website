@@ -1,0 +1,281 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectForm from '../components/ProjectForm.astro';
+import DemoMockup from '../components/DemoMockup.astro';
+import { getTranslations, localizedPath, type Locale } from '../i18n';
+
+interface Props { locale?: Locale }
+const { locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
+const copy = t.home;
+---
+<Base title={t.meta.home.title} description={t.meta.home.description} locale={locale} page="home">
+  <!-- Hero ----------------------------------------------------- -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow">{copy.hero.eyebrow}</p>
+        <h1 id="hero-title" class="hero__title">{copy.hero.title}</h1>
+        <p class="lead hero__lead">{copy.hero.lead}</p>
+        <div class="actions">
+          <a href="#plan" class="btn btn--primary" data-cta="hero_plan">{copy.hero.primaryCta}</a>
+          <a href="#product" class="link-arrow" data-cta="hero_product">{copy.hero.secondaryCta}</a>
+        </div>
+      </div>
+
+      <aside class="included" aria-labelledby="included-title">
+        <h2 id="included-title" class="included__title">{copy.included.title}</h2>
+        <ul role="list" class="included__list">
+          {copy.included.items.map((item) => (
+            <li>
+              <span class="included__mark" aria-hidden="true"></span>
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <p class="included__foot">{copy.included.footBefore} <a href={localizedPath(locale, 'about')} class="text-link">{copy.included.footLink}</a></p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 1. Problem ---------------------------------------------- -->
+  <section class="section" id="problem" aria-labelledby="problem-title">
+    <div class="container problem">
+      <div class="section-head problem__head">
+        <p class="eyebrow">{copy.problem.eyebrow}</p>
+        <h2 id="problem-title" class="h2">{copy.problem.title}</h2>
+        <p class="lead">{copy.problem.lead}</p>
+      </div>
+      <ol role="list" class="problem__list">
+        {copy.problem.items.map((p, i) => (
+          <li>
+            <span class="problem__n">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 2. Product ---------------------------------------------- -->
+  <section class="section section--compact" id="product" aria-labelledby="product-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">{copy.product.eyebrow}</p>
+        <h2 id="product-title" class="h2">{copy.product.title}</h2>
+        <p class="lead">{copy.product.lead}</p>
+      </div>
+
+      <div class="product" role="list">
+        {copy.product.parts.map((part) => (
+          <article class="product__part" role="listitem">
+            <p class="product__for">{part.side}</p>
+            <h3>{part.title}</h3>
+            <ul role="list" class="checklist">
+              {part.points.map((pt) => <li>{pt}</li>)}
+            </ul>
+            <p class="product__summary" aria-hidden="true">{part.points.join(' · ')}</p>
+          </article>
+        ))}
+      </div>
+      <p class="product__managed"><strong>{copy.product.managedLabel}</strong> {copy.product.managedText}</p>
+    </div>
+  </section>
+
+  <!-- 3. How it works ----------------------------------------- -->
+  <section class="section section--sunk" id="how-it-works" aria-labelledby="how-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">{copy.process.eyebrow}</p>
+        <h2 id="how-title" class="h2">{copy.process.title}</h2>
+      </div>
+      <ol role="list" class="steps">
+        {copy.process.steps.map((s) => (
+          <li class="step">
+            <span class="step__n" aria-hidden="true">{s.n}</span>
+            <h3><span class="visually-hidden">{copy.process.stepPrefix} {s.n}: </span>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4. Demo ------------------------------------------------- -->
+  <section class="section" id="demo" aria-labelledby="demo-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">{copy.demo.eyebrow}</p>
+        <h2 id="demo-title" class="h2">{copy.demo.title}</h2>
+        <p class="lead">{copy.demo.lead}</p>
+      </div>
+      <DemoMockup />
+      <div class="actions demo__actions">
+        <a href="#plan" class="btn btn--primary" data-cta="demo_plan">{copy.demo.cta}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. FAQ -------------------------------------------------- -->
+  <section class="section" id="faq" aria-labelledby="faq-title">
+    <div class="container faq">
+      <div class="section-head faq__head">
+        <p class="eyebrow">{copy.faq.eyebrow}</p>
+        <h2 id="faq-title" class="h2">{copy.faq.title}</h2>
+      </div>
+      <div class="faq__list">
+        {copy.faq.items.map((f) => (
+          <details class="faq__item">
+            <summary><span>{f.q}</span></summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Final CTA + form ------------------------------------- -->
+  <section class="section section--cta" id="plan" aria-labelledby="plan-title">
+    <div class="container plan">
+      <div class="plan__intro">
+        <p class="eyebrow">{copy.plan.eyebrow}</p>
+        <h2 id="plan-title" class="h2">{copy.plan.title}</h2>
+        <p class="lead">{copy.plan.lead}</p>
+        <ol role="list" class="next">
+          {copy.plan.steps.map((step, index) => <li><span>{index + 1}</span>{step}</li>)}
+        </ol>
+      </div>
+      <ProjectForm locale={locale} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero --------------------------------------------------------- */
+  .hero { padding-block: clamp(70px, 5vw, 84px) clamp(64px, 8vw, 112px); border-bottom: var(--hairline); }
+  .hero__grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: clamp(40px, 6vw, 96px); align-items: end; }
+  .hero__title { font-size: var(--fs-display); letter-spacing: -0.035em; line-height: 1.02; max-width: 16ch; }
+  .hero__lead { margin-top: var(--s-5); margin-bottom: var(--s-6); }
+
+  .included { border-top: 2px solid var(--ink); padding-top: var(--s-5); }
+  .included__title { font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; color: var(--muted); margin-bottom: var(--s-2); }
+  .included__list li { display: grid; grid-template-columns: 24px 1fr; gap: var(--s-3); padding-block: var(--s-4); border-bottom: var(--hairline); }
+  .included__mark { width: 10px; height: 10px; background: var(--accent); margin-top: 8px; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .included h3 { font-size: 1.05rem; letter-spacing: -0.01em; }
+  .included p { color: var(--ink-2); font-size: 0.95rem; margin-top: 4px; line-height: 1.5; }
+  .included__foot { margin-top: var(--s-4); font-size: var(--fs-small); color: var(--muted); }
+
+  /* Problem ------------------------------------------------------ */
+  .problem { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(40px, 6vw, 96px); align-items: start; }
+  .problem__head { margin-bottom: 0; position: sticky; top: 120px; }
+  .problem__list li { display: grid; grid-template-columns: 48px 1fr; column-gap: var(--s-4); row-gap: var(--s-2); padding-block: var(--s-6); border-top: var(--hairline); }
+  .problem__list li:last-child { border-bottom: var(--hairline); }
+  .problem__n { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); grid-row: span 2; padding-top: 4px; }
+  .problem__list h3 { font-size: 1.35rem; letter-spacing: -0.015em; }
+  .problem__list p { color: var(--ink-2); max-width: 52ch; }
+
+  /* Product ------------------------------------------------------ */
+  .section--compact { padding-block: clamp(56px, 7vw, 96px); }
+  .section--compact .section-head { margin-bottom: var(--s-6); gap: var(--s-4); }
+  .product { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--ink); border-radius: var(--r-md); background: var(--surface); overflow: hidden; }
+  .product__part { padding: var(--s-5); }
+  .product__part + .product__part { border-inline-start: var(--hairline); }
+  .product__for { font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: var(--s-3); }
+  .product__part h3 { font-size: 1.15rem; letter-spacing: -0.015em; margin-bottom: var(--s-3); }
+  .product .checklist li { padding-block: 6px; padding-inline: 24px 0; font-size: 0.925rem; }
+  .product .checklist li::before { top: 13px; width: 10px; height: 6px; }
+  .checklist li { position: relative; padding-block: 10px; padding-inline: 28px 0; border-top: var(--hairline); color: var(--ink-2); }
+  .checklist li::before { content: ''; position: absolute; inset-inline-start: 2px; top: 19px; width: 12px; height: 7px; border-inline-start: 1.75px solid var(--accent); border-bottom: 1.75px solid var(--accent); transform: rotate(-45deg); }
+  .product__summary { display: none; }
+  .product__managed { margin-top: var(--s-5); max-width: 70ch; color: var(--ink-2); }
+  .product__managed strong { color: var(--ink); }
+
+  /* Steps -------------------------------------------------------- */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-6); counter-reset: step; }
+  .step { position: relative; padding-top: var(--s-6); border-top: 1px solid var(--line-strong); }
+  .step__n {
+    position: absolute; top: -18px; inset-inline-start: 0; width: 36px; height: 36px; border-radius: 50%;
+    display: grid; place-items: center; background: var(--bg-sunk); border: 1px solid var(--ink);
+    font-family: var(--font-mono); font-size: 0.9rem; font-weight: 500;
+  }
+  .step h3 { font-size: var(--fs-h3); margin-bottom: var(--s-3); }
+  .step p { color: var(--ink-2); font-size: 0.975rem; }
+
+  /* FAQ ---------------------------------------------------------- */
+  .faq { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr); gap: clamp(40px, 6vw, 96px); align-items: start; }
+  .faq__head { margin-bottom: 0; }
+  .faq__list { border-top: 1px solid var(--ink); }
+  .faq__item { border-bottom: var(--hairline); }
+  .faq__item summary {
+    list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: var(--s-5);
+    padding-block: var(--s-5); font-weight: 600; font-size: 1.1rem; letter-spacing: -0.01em; min-height: 48px;
+  }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__item summary::after {
+    content: '+'; flex: none; width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%;
+    color: var(--accent); font-weight: 400; transition: transform 0.2s var(--ease);
+  }
+  .faq__item[open] summary::after { transform: rotate(45deg); }
+  .faq__item summary:hover span { color: var(--accent); }
+  .faq__item p { color: var(--ink-2); padding-bottom: var(--s-5); max-width: 64ch; margin-top: calc(var(--s-2) * -1); }
+
+  /* Plan / form -------------------------------------------------- */
+  .section--cta { background: var(--bg-sunk); }
+  .plan { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: clamp(40px, 6vw, 96px); align-items: start; }
+  .plan__intro { position: sticky; top: 120px; }
+  .plan__intro .lead { margin-top: var(--s-5); }
+  .next { margin-block: var(--s-6); border-top: var(--hairline); }
+  .next li { display: grid; grid-template-columns: 36px 1fr; gap: var(--s-3); padding-block: var(--s-3); border-bottom: var(--hairline); color: var(--ink-2); }
+  .next span { font-family: var(--font-mono); color: var(--accent); font-size: 0.9rem; padding-top: 2px; }
+  .demo__actions { margin-top: var(--s-7); }
+
+  /* Responsive --------------------------------------------------- */
+  @media (max-width: 1100px) {
+    .steps { grid-template-columns: repeat(2, 1fr); row-gap: var(--s-8); }
+  }
+  @media (max-width: 960px) {
+    .hero__grid { grid-template-columns: 1fr; align-items: start; }
+    .hero__title { max-width: 16ch; }
+    .included { max-width: 640px; }
+    .problem, .faq, .plan { grid-template-columns: 1fr; }
+    .problem__head, .plan__intro { position: static; }
+    .problem__head, .faq__head { margin-bottom: 0; }
+    .next { margin-bottom: var(--s-4); }
+  }
+  @media (max-width: 1200px) {
+    .product__for { display: none; }
+  }
+  @media (max-width: 900px) {
+    .product { grid-template-columns: 1fr 1fr; }
+    .product__part + .product__part { border-inline-start: 0; }
+    .product__part:nth-child(even) { border-inline-start: var(--hairline); }
+    .product__part:nth-child(n + 3) { border-top: var(--hairline); }
+  }
+  @media (max-width: 560px) {
+    .product { grid-template-columns: 1fr; }
+    .product__part { padding: var(--s-4); }
+    .product__part:nth-child(even) { border-inline-start: 0; }
+    .product__part + .product__part { border-top: var(--hairline); }
+    .product__for { display: none; }
+    .product__part h3 { font-size: 1.05rem; margin-bottom: 4px; }
+    .product .checklist { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .product__summary { display: block; color: var(--ink-2); font-size: 0.9rem; line-height: 1.5; }
+    .included { display: none; }
+    .hero { padding-top: var(--s-7); }
+    .hero__lead { margin-bottom: var(--s-5); }
+    .included__list li { grid-template-columns: 32px 1fr; padding-block: var(--s-3); }
+    .problem__list li { grid-template-columns: 1fr; padding-block: var(--s-5); }
+    .problem__n { grid-row: auto; padding-top: 0; }
+    .problem__list h3 { font-size: 1.2rem; }
+    .steps { grid-template-columns: 1fr; row-gap: 0; border-inline-start: 1px solid var(--line-strong); margin-inline-start: 18px; }
+    .step { border-top: 0; padding-block: 0 var(--s-6); padding-inline: var(--s-6) 0; }
+    .step:last-child { padding-bottom: 0; }
+    .step__n { inset-inline-start: -18px; top: -6px; }
+    .faq__item summary { font-size: 1.025rem; padding-block: var(--s-4); }
+  }
+</style>
+
